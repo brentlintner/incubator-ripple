@@ -17,6 +17,7 @@ var request = require('request'),
     express = require('express'),
     url = require('url'),
     colors = require('colors'),
+    path = require('path'),
     cors = require('connect-xcors'),
     server = require('ripple/server'),
     conf = require('ripple/server/conf');
@@ -26,10 +27,6 @@ colors.mode = "console";
 // TODO: Yes, we know. The API token is a joke.
 function authenticated(key) {
     return key === "ABC";
-}
-
-function contentIsXML(contentType) {
-    return !!(contentType && contentType.match(/xml/));
 }
 
 function getUserAgent(req, proxyReqHeaders) {
@@ -53,6 +50,12 @@ function proxy(req, res, callback) {
         proxyReqHeaders;
 
     if (authenticated(req.query.tinyhippos_apikey)) {
+        if (req.query.scheme === "file") {
+            res.status(200)
+               .sendfile(path.join(__dirname, 'index.html'));
+           return;
+        }
+
         console.log("INFO:".green + " Proxying cross origin XMLHttpRequest - " + parsedURL.href);
 
         proxyReqHeaders = Object.keys(req.headers).reduce(function (headers, key) {
@@ -101,27 +104,6 @@ function xhrProxyHandler(req, res/*, next*/) {
     });
 }
 
-function jsonpXHRProxyHandler(req, res/*, next*/) {
-    var callbackMethod = req.query.callback;
-
-    proxy(req, res, function callback(response, body) {
-        var reqData = {
-            headers: response.headers,
-            status: response.satusCode,
-            response: body
-        };
-
-        if (contentIsXML(response.headers["Content-Type"])) {
-            reqData.responseXML = body;
-        } else {
-            reqData.responseText = body;
-        }
-
-        res.set("Content-Type", "application/json");
-        res.send(callbackMethod + "(" + JSON.stringify(reqData) + ");");
-    });
-}
-
 function start(options, app) {
     var corsOptions = {
         origins: ["*"],
@@ -163,7 +145,6 @@ function start(options, app) {
     app.use(express.bodyParser());
 
     app.all(options.route + "/xhr_proxy", xhrProxyHandler);
-    app.all(options.route + "/jsonp_xhr_proxy", jsonpXHRProxyHandler);
 
     console.log("INFO:".green + " CORS XHR proxy service on: " +
                 ("http://localhost:" + app._port + options.route + "/xhr_proxy").cyan);

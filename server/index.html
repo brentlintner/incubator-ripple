@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>File Scheme XHR-CORS Bootstarp</title>
+        <script type="text/javascript" charset="utf-8">
+            window.addEventListener('load', function () {
+                var match = location.search.match(/tinyhippos_rurl=([^\&]*)$/);
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "http://127.0.0.1:4040/xhr_proxy?tinyhippos_apikey=ABC&tinyhippos_rurl=" + match[1], false);
+                xhr.send();
+                window.top.postMessage({
+response: xhr.response,
+headers: xhr.getAllResponseHeaders(),
+status: xhr.status
+                    }, "*");
+            });
+        </script>
+    </head>
+<body>
+</body>
+</html>

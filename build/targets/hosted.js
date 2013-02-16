@@ -18,40 +18,33 @@
  * under the License.
  *
  */
-var childProcess = require('child_process'),
-    fs = require('fs'),
+var fs = require('fs'),
     path = require('path'),
     _c = require('./../conf'),
+    cp = require('shelljs').cp,
+    mkdir = require('shelljs').mkdir,
     PKG_BUILD_DIR = path.join(_c.DEPLOY, "hosted");
 
-module.exports = function (src, baton) {
-    baton.take();
+module.exports = function (src/*, baton*/) {
+    mkdir(PKG_BUILD_DIR);
+    cp('-r', _c.ASSETS + 'client/images ' + PKG_BUILD_DIR);
+    cp('-r', _c.ASSETS + 'client/themes ' + PKG_BUILD_DIR);
 
-    var copy = 'mkdir ' + PKG_BUILD_DIR + " &&" +
-               'cp -r ' + _c.ASSETS + "client/images " + PKG_BUILD_DIR + " &&" +
-               'cp -r ' + _c.ASSETS + "client/themes " + PKG_BUILD_DIR;
+    var css = path.join(_c.ASSETS + "client", "ripple.css"),
+        cssDeploy = path.join(PKG_BUILD_DIR, "ripple.css"),
+        jsDeploy = path.join(PKG_BUILD_DIR, "ripple.js"),
+        htmlDeploy = path.join(PKG_BUILD_DIR, "index.html"),
+        html = src.html.replace(/#OVERLAY_VIEWS#/g, src.overlays)
+                      .replace(/#PANEL_VIEWS#/g, src.panels)
+                      .replace(/#DIALOG_VIEWS#/g, src.dialogs)
+                      .replace(/#URL_PREFIX#/g, "/ripple/assets/");
 
-    childProcess.exec(copy, function (error/*, stdout, stderr*/) {
-        if (error) { throw new Error(error); }
+    fs.writeFileSync(cssDeploy, fs.readFileSync(css, "utf-8") + src.skins);
 
-        var css = path.join(_c.ASSETS + "client", "ripple.css"),
-            cssDeploy = path.join(PKG_BUILD_DIR, "ripple.css"),
-            jsDeploy = path.join(PKG_BUILD_DIR, "ripple.js"),
-            htmlDeploy = path.join(PKG_BUILD_DIR, "index.html"),
-            html = src.html.replace(/#OVERLAY_VIEWS#/g, src.overlays)
-                          .replace(/#PANEL_VIEWS#/g, src.panels)
-                          .replace(/#DIALOG_VIEWS#/g, src.dialogs)
-                          .replace(/#URL_PREFIX#/g, "/ripple/assets/");
+    fs.writeFileSync(htmlDeploy, html, "utf-8");
 
-        fs.writeFileSync(cssDeploy, fs.readFileSync(css, "utf-8") + src.skins);
-
-        fs.writeFileSync(htmlDeploy, html, "utf-8");
-
-        fs.writeFileSync(jsDeploy,
-            src.js +
-            "ripple('bootstrap').bootstrap();"
-        );
-
-        baton.pass(src);
-    });
+    fs.writeFileSync(jsDeploy,
+        src.js +
+        "ripple('bootstrap').bootstrap();"
+    );
 };

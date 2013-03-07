@@ -233,7 +233,7 @@ section.left { left: 0; }
 }
 
 .range-label-left {
-    margin-top: 1px;
+    margin-top: 2px;
     right: 150px;
     font-weight: bold;
     position: absolute;
@@ -550,6 +550,12 @@ section.left { left: 0; }
 
 .layout-not-selected {
     opacity: 0.4;
+}
+
+#viewport-zoom, #device-zoom, #device-pixel-ratio {
+    width: 30px;
+    text-align: center;
+    margin-right: 3px;
 }
 
 /* ------------------------------>

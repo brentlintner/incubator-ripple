@@ -18,8 +18,7 @@
  * under the License.
  *
  */
-var childProcess = require('child_process'),
-    utils = require('./../utils'),
+var utils = require('./../utils'),
     fs = require('fs'),
     path = require('path'),
     shell = require('shelljs'),

@@ -18,14 +18,11 @@
  * under the License.
  *
  */
-var childProcess = require('child_process'),
+var rm = require('shelljs').rm,
+    mkdir = require('shelljs').mkdir,
     _c = require('./conf');
 
-module.exports = function (prev, baton) {
-    baton.take();
-
-    var cmd = 'rm -rf ' + _c.DEPLOY + ' && ' +
-              'mkdir ' + _c.DEPLOY;
-
-    childProcess.exec(cmd, baton.pass);
+module.exports = function (/*prev, baton*/) {
+    rm("-rf", _c.DEPLOY);
+    mkdir(_c.DEPLOY);
 };

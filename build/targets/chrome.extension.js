@@ -66,4 +66,6 @@ module.exports = function (src/*, baton*/) {
     });
 
     fs.writeFileSync(manifest, JSON.stringify(manifestJSON), "utf-8");
+
+    return src;
 };

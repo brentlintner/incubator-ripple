@@ -27,8 +27,8 @@ var fs = require('fs'),
 
 module.exports = function (src/*, baton*/) {
     mkdir(PKG_BUILD_DIR);
-    cp('-r', _c.ASSETS + 'client/images ' + PKG_BUILD_DIR);
-    cp('-r', _c.ASSETS + 'client/themes ' + PKG_BUILD_DIR);
+    cp('-r', path.join(_c.ASSETS, 'client', 'images'), PKG_BUILD_DIR);
+    cp('-r', path.join(_c.ASSETS + 'client', 'themes'), PKG_BUILD_DIR);
 
     var css = path.join(_c.ASSETS + "client", "ripple.css"),
         cssDeploy = path.join(PKG_BUILD_DIR, "ripple.css"),
@@ -47,4 +47,6 @@ module.exports = function (src/*, baton*/) {
         src.js +
         "ripple('bootstrap').bootstrap();"
     );
+
+    return src;
 };

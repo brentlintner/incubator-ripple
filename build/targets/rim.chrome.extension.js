@@ -33,8 +33,14 @@ module.exports = function (src/*, baton*/) {
     cp('-rf', join(_c.EXT + _EXT_DIR),  _c.DEPLOY);
     cp('-r', join(_c.ASSETS, 'client', 'images'), join(_c.DEPLOY, _EXT_DIR));
     cp('-r', join(_c.ASSETS + 'client', 'themes'), join(_c.DEPLOY + _EXT_DIR));
-    cp('-r', join(_c.ROOT, 'services'), path.join(_c.DEPLOY, _EXT_DIR));
-    cp('-r', join(_c.ROOT, 'plugins'), path.join(_c.DEPLOY, _EXT_DIR));
+
+    if (fs.existsSync(join(_c.ROOT, 'services'))) {
+        cp('-r', join(_c.ROOT, 'services'), path.join(_c.DEPLOY, _EXT_DIR));
+    }
+
+    if (fs.existsSync(join(_c.ROOT, 'plugins'))) {
+        cp('-r', join(_c.ROOT, 'plugins'), path.join(_c.DEPLOY, _EXT_DIR));
+    }
 
     var css = _c.ASSETS + "client/ripple.css",
         cssDeploy = _c.DEPLOY + _EXT_DIR + "/ripple.css",
@@ -75,4 +81,6 @@ module.exports = function (src/*, baton*/) {
     });
 
     fs.writeFileSync(manifest, JSON.stringify(manifestJSON), "utf-8");
+
+    return src;
 };

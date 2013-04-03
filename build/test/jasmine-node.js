@@ -20,7 +20,8 @@
  */
 var utils = require('./../utils'),
     _c = require('./../conf'),
-    jasmine = require(_c.THIRDPARTY + 'jasmine/lib/jasmine-core/jasmine');
+    path = require ('path'),
+    jasmine = require(path.join(_c.THIRDPARTY, 'jasmine', 'jasmine'));
 
 function run(targets, done) {
     var suites = [],

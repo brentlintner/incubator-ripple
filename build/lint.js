@@ -20,7 +20,10 @@
  */
 var childProcess = require('child_process'),
     _c = require('./conf'),
-    fs = require('fs');
+    fs = require('fs'),
+    path = require('path'),
+    JSHINT = path.join(__dirname, "/../node_modules/.bin/jshint"),
+    CSSLINT = path.join(__dirname, "/../node_modules/.bin/csslint");
 
 function _spawn(proc, args, done) {
     function log(data) {
@@ -38,13 +41,13 @@ function _spawn(proc, args, done) {
 }
 
 function _lintJS(files, done) {
-    _spawn('jshint', files, done);
+    _spawn(JSHINT, files, done);
 }
 
 function _lintCSS(files, done) {
     var rules = JSON.parse(fs.readFileSync(_c.ROOT + ".csslintrc", "utf-8")),
         options = ["--errors=" + rules, "--format=compact", "--quiet"];
-    _spawn('csslint', files.concat(options), function (/*code*/) {
+    _spawn(CSSLINT, files.concat(options), function (/*code*/) {
         // TODO: There is a lingering CSS error that can not be turned off.
         //       Once fix, pass code back into this callback.
         done(0);

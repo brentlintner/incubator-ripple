@@ -20,18 +20,20 @@
  */
 var childProcess = require('child_process'),
     fs = require('fs'),
+    path = require('path'),
     _c = require('./conf'),
     utils = require('./utils'),
     childProcess = require('child_process'),
     jWorkflow = require('jWorkflow'),
     cssmin = require('cssmin').cssmin,
-    htmlmin = require('html-minifier').minify;
+    htmlmin = require('html-minifier').minify,
+    UGLIFYJS = path.join(__dirname, "/../node_modules/.bin/uglifyjs");
 
 function compressJS(workflow, file) {
     workflow.andThen(function (prev, baton) {
         baton.take();
         console.log("minifying:", file);
-        childProcess.exec('uglifyjs --output ' + file + " " + file, function (err) {
+        childProcess.exec(UGLIFYJS + ' --output ' + file + " " + file, function (err) {
             if (err) {
                 console.log("Something bad happened. Is uglify-js installed?");
                 console.log(err);

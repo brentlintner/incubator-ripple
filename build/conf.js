@@ -20,7 +20,7 @@
  */
 module.exports = {
     APPNAME: "Ripple Mobile Environment Emulator",
-    LICENSE: "LICENSE",
+    LICENSE: __dirname + "/../LICENSE",
     PACKAGE_JSON: __dirname + "/../package.json",
     ROOT: __dirname + "/../",
     BUILD: __dirname + "/",

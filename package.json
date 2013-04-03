@@ -25,7 +25,10 @@
     "emulator"
   ],
   "bin": { "ripple": "./bin/ripple" },
-  "scripts": {"preinstall": "node thirdparty/ludicrous.js"},
+  "scripts": {
+    "preinstall": "node thirdparty/ludicrous.js",
+    "postinstall": "node node_modules/.bin/jake build[hosted]"
+  },
   "main": "./lib/index",
   "dependencies": {
     "express": "3.1.0",
@@ -33,29 +36,19 @@
     "request": "2.12.0",
     "colors" : "0.6.0-1",
     "moment" : "1.x.x",
-    "accounting" : "0.x.x"
-  },
-  "devDependencies": {
-    "connect": "2.3.6",
-    "jsdom": "0.2.14",
+    "accounting" : "0.x.x",
     "cssmin": "0.3.1",
     "html-minifier": "0.4.5",
     "jWorkflow": "0.x.x",
+    "jake": "*",
+    "uglify-js": "2.x.x",
+    "jshint": "1.x.x",
+    "csslint": "0.9.x",
+    "connect": "2.3.6",
+    "jsdom": "0.2.14",
     "xmlhttprequest": "1.4.2",
     "coverjs": "0.0.14"
   },
-  "files": [
-    "README.md",
-    "LICENSE",
-    "lib/index.js",
-    "lib/server",
-    "lib/cli",
-    "assets/server",
-    "pkg/hosted",
-    "thirdparty/ludicrous.js",
-    "doc",
-    "bin"
-  ],
   "engines": {
     "node": ">= 0.8.0",
     "npm":  ">= 1.1.0"

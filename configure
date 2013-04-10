@@ -17,6 +17,5 @@
 # under the License.
 # 
 
-npm install -g jake jshint csslint uglify-js
+npm install -g jake
 npm install
-git submodule update --init
